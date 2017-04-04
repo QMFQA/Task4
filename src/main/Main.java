@@ -8,14 +8,14 @@ import task.Matrix;
 
 public class Main {
 
-	private static final Matrix[] MATRIX = { 
+	private static final  Matrix[] MATRIX = { 
 			new Matrix(new File("A.txt")), 
 			new Matrix(new File("B.txt")), 
 			new Matrix(new File("C.txt"))
 			};
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) throws IllegalMatrixDimensionException, DivisionByZeroException {
+		
 		for (int i = 0; i < MATRIX.length; i++) {
 			for (int j = 0; j < MATRIX.length; j++) {
 				if (i + j % 2 == 0) {
@@ -31,5 +31,6 @@ public class Main {
 		}
 
 	}
-
+	
 }
+
