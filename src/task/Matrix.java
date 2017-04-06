@@ -9,10 +9,7 @@ public class Matrix {
 	private int [][] elements;
 	private int numRows;
 	private int numColumns;
-	
-	private Matrix () {
-		name = "NullMatrix";
-	}
+
 	
 	private Matrix(int[][] inputElements) {
 		name = "Unnamed matrix";
@@ -69,14 +66,7 @@ public class Matrix {
 	}
 
 	public Matrix add(Matrix matrix) throws IllegalMatrixDimensionException {
-		if ((this.numColumns != matrix.numColumns) || (this.numRows != matrix.numRows)) {
-			try {
-				throw new IllegalMatrixDimensionException();
-			} catch (IllegalMatrixDimensionException imde) {
-				System.out.println(imde.getMessage());
-				return new Matrix ();
-			}
-		}
+		if ((this.numColumns != matrix.numColumns) || (this.numRows != matrix.numRows)) throw new IllegalMatrixDimensionException();
 		int[][] tempElements = new int [numRows][numColumns];
 		for (int i=0; i<numRows; i++)
 			for (int j=0; j<numColumns; j++) tempElements[i][j] = this.elements [i][j]+matrix.elements [i][j];
@@ -84,14 +74,7 @@ public class Matrix {
 	}
 
 	public Matrix mult(Matrix matrix) throws IllegalMatrixDimensionException {
-		if (this.numColumns != matrix.numRows) {
-			try {
-				throw new IllegalMatrixDimensionException();
-			} catch (IllegalMatrixDimensionException imde) {
-				System.out.println(imde.getMessage());
-				return new Matrix ();
-			}
-		}
+		if (this.numColumns != matrix.numRows) throw new IllegalMatrixDimensionException();
 		int[][] tempElements = new int [this.numRows][matrix.numColumns];
 		for (int i=0; i<this.numRows; i++)
 			for (int j=0; j<matrix.numColumns; j++) 
@@ -104,14 +87,7 @@ public class Matrix {
 	}
 
 	public Matrix div(int divider) throws DivisionByZeroException {
-		if (divider == 0) {
-			try {
-				throw new DivisionByZeroException();
-			} catch (DivisionByZeroException dbze) {
-				System.out.println(dbze.getMessage());
-				return new Matrix ();
-			}
-		}
+		if (divider == 0) throw new DivisionByZeroException();
 		int[][] tempElements = new int [numRows][numColumns];
 		for (int i=0; i<numRows; i++)
 			for (int j=0; j<numColumns; j++) tempElements[i][j] = this.elements [i][j]/divider;

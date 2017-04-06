@@ -18,16 +18,24 @@ public class Main {
 		
 		for (int i = 0; i < MATRIX.length; i++) {
 			for (int j = 0; j < MATRIX.length; j++) {
-				if (i + j % 2 == 0) {
-					System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
-					System.out.println(MATRIX[i].add(MATRIX[j]));
-				} else {
-					System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
-					System.out.println(MATRIX[i].mult(MATRIX[j]));
+				try {
+					if (i + j % 2 == 0) {
+						System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
+						System.out.println(MATRIX[i].add(MATRIX[j]));
+					} else {
+						System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
+						System.out.println(MATRIX[i].mult(MATRIX[j]));
+					}
+				} catch (IllegalMatrixDimensionException imde) {
+					System.out.println(imde.getMessage()+"\n");
 				}
 			}
-			System.out.println(MATRIX[i].getName() + " / " + i + " =");
-			System.out.println(MATRIX[i].div(i));
+			try {
+				System.out.println(MATRIX[i].getName() + " / " + i + " =");
+				System.out.println(MATRIX[i].div(i));
+			} catch (DivisionByZeroException dbze) {
+				System.out.println(dbze.getMessage()+"\n");
+			}
 		}
 
 	}
