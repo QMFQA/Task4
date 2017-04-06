@@ -127,16 +127,14 @@ public class Matrix {
 	public Matrix div( int divider ) throws DivisionByZeroException, IllegalMatrixDimensionException {
 		Matrix result;
 		
+		if( divider == 0 ) {
+			throw( new DivisionByZeroException() ); 
+		}
 		result = new Matrix( this.getnRows(), this.getnCols() );
 		// divide
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < this.getnCols(); j++ ) {
-				try {
 					result.setItem(i, j, this.getItem(i, j) / divider);
-				}
-				catch (ArithmeticException e) {
-					throw( new DivisionByZeroException() ); 
-				}
 			}
 		}	
 		

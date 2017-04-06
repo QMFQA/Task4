@@ -17,20 +17,16 @@ public class Main {
 
 		for (int i = 0; i < MATRIX.length; i++)	{
 			for (int j = 0; j < MATRIX.length; j++) {
-				if (i + j % 2 == 0) {
-					System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
-					try {
+				try {
+					if (i + j % 2 == 0) {
+						System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
 						System.out.println(MATRIX[i].add(MATRIX[j]));
-					} catch (IllegalMatrixDimensionException e) {
-						System.out.println(e.getLocalizedMessage());
-					}
-				} else {
-					System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
-					try {
+					} else {
+						System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
 						System.out.println(MATRIX[i].mult(MATRIX[j]));
-					} catch (IllegalMatrixDimensionException e) {
-						System.out.println(e.getLocalizedMessage());
 					}
+				} catch (IllegalMatrixDimensionException e) {
+					System.out.println(e.getLocalizedMessage());
 				}
 			}
 			System.out.println(MATRIX[i].getName() + " / " + i + " =");
