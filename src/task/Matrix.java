@@ -13,12 +13,12 @@ public class Matrix {
 	private int body[][];
 	String name;
 	
-	public Matrix( int rows, int cols ) throws IllegalMatrixDimensionException {
+	public Matrix( int rows, int cols, String name ) throws IllegalMatrixDimensionException {
 		if( rows <= 0 || cols <= 0 ) {
 			throw( new IllegalMatrixDimensionException("Dimensions must be greater than zero: [" + rows + "][" + cols + "]") );
 		}
 		body = new int[rows][cols];
-		name = "unnamed";
+		this.name = name;
 	}
 	
 	public Matrix( File inFile ) {
@@ -68,10 +68,6 @@ public class Matrix {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	public void setItem( int row, int col, int value ) {
 		body[row][col] = value;
 	}
@@ -94,7 +90,7 @@ public class Matrix {
 		if( (this.getnCols() != m.getnCols()) || (this.getnRows() != m.getnRows()) ) {
 			throw( new IllegalMatrixDimensionException() );
 		}
-		result = new Matrix( this.getnRows(), this.getnCols() );
+		result = new Matrix( this.getnRows(), this.getnCols(), "R" );
 				// do addition
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < this.getnCols(); j++ ) {
@@ -111,7 +107,7 @@ public class Matrix {
 		if( (this.getnCols() != m.getnRows()) ) {
 			throw( new IllegalMatrixDimensionException() );
 		}
-		result = new Matrix( this.getnRows(), m.getnCols() );
+		result = new Matrix( this.getnRows(), m.getnCols(), "R" );
 				// Do multiplication
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < m.getnCols(); j++ ) {
@@ -130,7 +126,7 @@ public class Matrix {
 		if( divider == 0 ) {
 			throw( new DivisionByZeroException() ); 
 		}
-		result = new Matrix( this.getnRows(), this.getnCols() );
+		result = new Matrix( this.getnRows(), this.getnCols(), "R" );
 		// divide
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < this.getnCols(); j++ ) {
