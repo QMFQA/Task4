@@ -27,7 +27,7 @@ public class Main {
 								System.out.println(MATRIX[i].mult(MATRIX[j]));
 							}
 						} catch (IllegalMatrixDimensionException e) {
-							System.out.println("Matrices have illegal dimensions for this operation\n");
+							System.out.println(e.getMessage());
 						}
 					}
 					try{
@@ -35,7 +35,7 @@ public class Main {
 						System.out.println(MATRIX[i].div(i));
 					}
 					catch (DivisionByZeroException e) {
-						System.out.println("Cannot divide by zero!\n");
+						System.out.println(e.getMessage());
 					}
 			}
 	}

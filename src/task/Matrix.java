@@ -56,9 +56,9 @@ public class Matrix {
 		return buffer.toString();
 	}
 
-	public Matrix add(Matrix matrix) throws IllegalMatrixDimensionException{
+	public Matrix add(Matrix matrix) throws IllegalMatrixDimensionException {
 		int[][] sum = new int[row_count][column_count];
-		if(row_count!=matrix.row_count || column_count!=matrix.column_count){
+		if (row_count != matrix.row_count || column_count != matrix.column_count) {
 			throw new IllegalMatrixDimensionException();
 		}
 		for (int i = 0; i < row_count; i++) {
@@ -71,7 +71,7 @@ public class Matrix {
 
 	public Matrix mult(Matrix matrix) throws IllegalMatrixDimensionException {
 		int[][] result = new int[row_count][matrix.column_count];
-		if(column_count!=matrix.row_count){
+		if (column_count != matrix.row_count) {
 			throw new IllegalMatrixDimensionException();
 		}
 		for (int i = 0; i < row_count; i++) {
@@ -86,7 +86,7 @@ public class Matrix {
 
 	public Matrix div(int num) throws DivisionByZeroException {
 		int[][] result = new int[row_count][column_count];
-		if(num==0){
+		if (num == 0) {
 			throw new DivisionByZeroException();
 		}
 		for (int i = 0; i < row_count; i++) {
