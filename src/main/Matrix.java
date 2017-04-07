@@ -2,10 +2,8 @@ package main;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -26,50 +24,32 @@ public class Matrix {
 		columnsCount = columns;
 	}
 
-	/*
-	private void setValue(int row, int column, int value){
-		matrix[row][column] = value;
-	}
-	*/
-	
-	private int getElement(int row, int column){
-		return matrix[row][column];
-	}
-	
-	private int getRowsCount(){
-		return rowsCount;
-	}
-	
-	private int getColumnsCount(){
-		return columnsCount;
-	}
-	
 	public String getName() {
 		return name;
 	}
 	
 	public Matrix add(Matrix m2) throws IllegalMatrixDimensionException{
-		if (m2.getRowsCount() != this.rowsCount || m2.getColumnsCount() != this.columnsCount)
+		if (m2.rowsCount != this.rowsCount || m2.columnsCount != this.columnsCount)
 			throw new IllegalMatrixDimensionException();
 		Matrix result_matrix = new Matrix(this.rowsCount,this.columnsCount);
 		for (int i=0; i < this.rowsCount; i++)
 			for (int j=0; j<this.columnsCount; j++)
-				result_matrix.matrix[i][j] = m2.getElement(i, j) + matrix[i][j];
+				result_matrix.matrix[i][j] = m2.matrix[i][j] + matrix[i][j];
 		return result_matrix;
 	}
 	
 	public Matrix mult(Matrix m2) throws IllegalMatrixDimensionException{
 		Matrix matrix_mult;
-		if (m2.getRowsCount() == matrix[0].length) {
-			matrix_mult = new Matrix(rowsCount, m2.getColumnsCount());
+		if (m2.rowsCount == matrix[0].length) {
+			matrix_mult = new Matrix(rowsCount, m2.columnsCount);
 			int matrix_mult_element;
 			for (int m1_rows = 0; m1_rows < matrix.length; m1_rows++ )
 			{						
-				for (int matrix_mult_col = 0; matrix_mult_col < matrix_mult.getColumnsCount(); matrix_mult_col++)
+				for (int matrix_mult_col = 0; matrix_mult_col < matrix_mult.columnsCount; matrix_mult_col++)
 				{
 						matrix_mult_element = 0;
-						for (int m2_rows = 0; m2_rows < m2.getRowsCount(); m2_rows++)
-							matrix_mult_element += matrix[m1_rows][m2_rows]*m2.getElement(m2_rows, matrix_mult_col);
+						for (int m2_rows = 0; m2_rows < m2.rowsCount; m2_rows++)
+							matrix_mult_element += matrix[m1_rows][m2_rows]*m2.matrix[m2_rows][matrix_mult_col];
 						matrix_mult.matrix[m1_rows][matrix_mult_col] = matrix_mult_element;
 				}
 			}
@@ -83,8 +63,8 @@ public class Matrix {
 	public Matrix div(int divider) throws DivisionByZeroException{
 		if (divider != 0) {
 			Matrix matrix_div = new Matrix(rowsCount, columnsCount);
-			for (int i=0; i<matrix_div.getRowsCount(); i++)
-				for (int j=0; j<matrix_div.getColumnsCount(); j++)
+			for (int i=0; i<matrix_div.rowsCount; i++)
+				for (int j=0; j<matrix_div.columnsCount; j++)
 						matrix_div.matrix[i][j] = matrix[i][j]/divider;
 			return matrix_div;
 		}
