@@ -10,32 +10,29 @@ public class Main {
 			new Matrix(new File("C.txt"))
 			};
 
-	public static void main(String[] args) throws DivisionByZeroException, IllegalMatrixDimensionException {
+	public static void main(String[] args) {
 		for (int i = 0; i < MATRIX.length; i++) {
 			for (int j = 0; j < MATRIX.length; j++) {
-				if (i + j % 2 == 0) 
-					try {
+				try {
+					if (i + j % 2 == 0) {
 						System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
 						System.out.println(MATRIX[i].add(MATRIX[j]));
 					}
-					catch (IllegalMatrixDimensionException e){
-						System.out.println("Matrices have illegal dimensions for this operation\n");
-					}
-				else 
-					try {
+					else{
 						System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
 						System.out.println(MATRIX[i].mult(MATRIX[j]));
 					}
-					catch (IllegalMatrixDimensionException e){
-						System.out.println("Matrices have illegal dimensions for this operation\n");
-					}
+				}
+				catch (IllegalMatrixDimensionException e){
+						System.out.println(e.getMessage() + "\n");
+				}
 			}
 			try {
 				System.out.println(MATRIX[i].getName() + " / " + i + " =");
 				System.out.println(MATRIX[i].div(i));
 			}
 			catch (DivisionByZeroException e){
-				System.out.println("Cannot divide by zero!\n");
+				System.out.println(e.getMessage() + "\n");
 			}
 		}
 	}

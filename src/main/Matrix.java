@@ -3,6 +3,7 @@ package main;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -25,9 +26,11 @@ public class Matrix {
 		columnsCount = columns;
 	}
 
+	/*
 	private void setValue(int row, int column, int value){
 		matrix[row][column] = value;
 	}
+	*/
 	
 	private int getElement(int row, int column){
 		return matrix[row][column];
@@ -51,7 +54,7 @@ public class Matrix {
 		Matrix result_matrix = new Matrix(this.rowsCount,this.columnsCount);
 		for (int i=0; i < this.rowsCount; i++)
 			for (int j=0; j<this.columnsCount; j++)
-				result_matrix.setValue(i, j, m2.getElement(i, j) + matrix[i][j]);
+				result_matrix.matrix[i][j] = m2.getElement(i, j) + matrix[i][j];
 		return result_matrix;
 	}
 	
@@ -67,7 +70,7 @@ public class Matrix {
 						matrix_mult_element = 0;
 						for (int m2_rows = 0; m2_rows < m2.getRowsCount(); m2_rows++)
 							matrix_mult_element += matrix[m1_rows][m2_rows]*m2.getElement(m2_rows, matrix_mult_col);
-						matrix_mult.setValue(m1_rows, matrix_mult_col, matrix_mult_element);
+						matrix_mult.matrix[m1_rows][matrix_mult_col] = matrix_mult_element;
 				}
 			}
 			return matrix_mult;
@@ -82,7 +85,7 @@ public class Matrix {
 			Matrix matrix_div = new Matrix(rowsCount, columnsCount);
 			for (int i=0; i<matrix_div.getRowsCount(); i++)
 				for (int j=0; j<matrix_div.getColumnsCount(); j++)
-						matrix_div.setValue(i, j, matrix[i][j]/divider);
+						matrix_div.matrix[i][j] = matrix[i][j]/divider;
 			return matrix_div;
 		}
 		else throw new DivisionByZeroException();
@@ -90,11 +93,9 @@ public class Matrix {
 
 	private void readFile(File f) 
 	{
-		BufferedReader reader = null;
 		ArrayList<String> fileContent = new ArrayList<>();
-		try(FileInputStream fis=new FileInputStream(f))
+		try(BufferedReader reader = new BufferedReader(new FileReader(f))) 
         {
-			reader = new BufferedReader(new InputStreamReader(fis));
             String line;          		
             while ((line = reader.readLine()) != null){
                 fileContent.add(line);
@@ -128,18 +129,6 @@ public class Matrix {
         catch(IOException ex){
             System.out.println(ex.getMessage());
         }
-		finally {
-			if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                	System.out.println(e.getMessage());
-                }
-            }
-		}
-		
-		
-		
 	}
 	
 	@Override
