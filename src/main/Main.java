@@ -1,7 +1,6 @@
 package main;
 
 import java.io.File;
-
 import exceptions.DivisionByZeroException;
 import exceptions.IllegalMatrixDimensionException;
 import task.Matrix;
@@ -20,14 +19,27 @@ public class Main {
 			for (int j = 0; j < MATRIX.length; j++) {
 				if (i + j % 2 == 0) {
 					System.out.println(MATRIX[i].getName() + " + " + MATRIX[j].getName() + " =");
+					try {
 					System.out.println(MATRIX[i].add(MATRIX[j]));
-				} else {
+					}
+					catch (IllegalMatrixDimensionException e) {
+					}
+				} 
+					else {
 					System.out.println(MATRIX[i].getName() + " * " + MATRIX[j].getName() + " =");
+					try{
 					System.out.println(MATRIX[i].mult(MATRIX[j]));
+					}
+					catch (IllegalMatrixDimensionException e) {
+					}
 				}
 			}
 			System.out.println(MATRIX[i].getName() + " / " + i + " =");
+			try{
 			System.out.println(MATRIX[i].div(i));
+			}
+			catch (DivisionByZeroException e) {
+			}
 		}
 
 	}
