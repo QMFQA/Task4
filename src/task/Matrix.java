@@ -41,7 +41,6 @@ public class Matrix {
 		    }
 		    	
 			if( nRows <= 0 || nCols <= 0 ) {
-//				System.out.println("Matrix " + name + ": Dimensions must be greater than zero: [" + nRows + "][" + nCols + "]");
 				throw( new IllegalMatrixDimensionException( "Matrix " + name + ": Dimensions must be greater than zero [" + nRows + "][" + nCols + "]" ) );
 			}
 
@@ -94,7 +93,7 @@ public class Matrix {
 				// do addition
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < this.getnCols(); j++ ) {
-				result.setItem(i, j, this.getItem(i, j) + m.getItem(i, j));
+				result.body[i][j] = this.body[i][j] + m.body[i][j];  
 			}
 		}	
 		
@@ -112,7 +111,7 @@ public class Matrix {
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < m.getnCols(); j++ ) {
 				for( int k=0; k < this.getnCols(); k++ ) {
-					result.setItem(i, j, result.getItem(i, j) + this.getItem(i, k) * m.getItem(k, j));
+					result.body[i][j] += this.body[i][k] * m.body[k][j];
 				}
 			}
 		}	
@@ -130,7 +129,7 @@ public class Matrix {
 		// divide
 		for (int i=0; i < this.getnRows(); i++ ) {
 			for (int j=0; j < this.getnCols(); j++ ) {
-					result.setItem(i, j, this.getItem(i, j) / divider);
+				result.body[i][j] = this.body[i][j] / divider;
 			}
 		}	
 		
