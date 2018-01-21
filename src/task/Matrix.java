@@ -2,6 +2,7 @@ package task;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
@@ -12,93 +13,94 @@ import exceptions.DivisionByZeroException;
 public class Matrix {
 	
 	private final String name;
-	private int rows = 0;
-	private int cols = 0;
 	private int[][] data;
-	
-	public Matrix(File file)  {
-		this.name = file.getName().substring(0, 1);
-			
-		try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(file)))) {
-				
-			String line[] = null;
-				
-			//Reading and setting Matrix dimensions
-			if (scanner.hasNextLine()) {
-				line = scanner.nextLine().split(" ");
-					
-				if (line.length == 2) {
-					try {
-						this.rows = Integer.parseInt(line[0]);
-						this.cols = Integer.parseInt(line[1]);
-					} catch (NumberFormatException e) {
-						throw new IOException("Matrix '" + this.name + "' cannot be created: " +
-								"source file contains incorrect data");
-					}
-				}
-					
-				if (this.rows == 0 || this.cols == 0) {
-					throw new IllegalMatrixDimensionException("Matrix '" + this.name + "' cannot be created: " +
-							"the number of rows and columns must be greater than 0");
-				}
-			}
-				
-			//Initializing Matrix array
-			this.data = new int[rows][cols];
-				
-			//Populating Matrix with data
-			for (int i = 0; i < this.rows; i++) {
-				line = null;
-						
-				if (scanner.hasNextLine()) {
-					line = scanner.nextLine().split(" ");
-				}
-						
-				if (line.length != this.cols) {
-					throw new IOException("Matrix '" + this.name + "' cannot be created: " +
-							"source file contains incorrect data in line " + (i+2));
-				}
-							
-				for (int j = 0; j < this.cols; j++) {
-					try {
-						this.data[i][j] = Integer.parseInt(line[j]);
-					} catch (NumberFormatException e) {
-						throw new IOException("Matrix '" + this.name + "' cannot be created: " +
-								"source file contains incorrect data");
-					}													
-				}						
-			}						
-				
-		} catch (IOException | IllegalMatrixDimensionException e) {
-			System.out.println(e.getMessage());
-			System.out.println("Exiting...");
-			System.exit(-1);
-		}
-	}
-	
+
 	public Matrix(String name, int[][] data) throws IllegalMatrixDimensionException {
 		this.name = name;
 		
 		if (data != null) {
-			this.rows = data.length;
-			this.cols = data[0].length;
 			this.data = data;
 		} else {
 			throw new IllegalMatrixDimensionException();
 		}
+	}	
+	
+	public Matrix(File file)  {
+		this.name = file.getName().substring(0, 1);
+		
+		int[][] data = null;
+		
+		try {
+			data = readMatrixFromFile(file);
+		} catch (IllegalMatrixDimensionException e) {
+			System.out.println("Matrix '" + this.name + "' cannot be created: " + 
+					e.getLocalizedMessage());
+		}
+		
+		if (data != null) {
+			this.data = data;
+		} else {
+			System.out.println("Exiting...");
+			System.exit(-1);
+		}		
+	}
+
+	private int[][] readMatrixFromFile(File file) throws IllegalMatrixDimensionException {
+		int[][] data = null;
+		int rows = 0;
+		int cols = 0;
+		
+		try (BufferedReader buffer = new BufferedReader(new FileReader(file))) {		
+			
+			String line = null;
+			
+			//Reading and setting Matrix dimensions
+			if ((line = buffer.readLine()) != null) {
+				try (Scanner scanner = new Scanner(line)) {
+					rows = scanner.nextInt();
+					cols = scanner.nextInt();
+				} 								
+			}
+			
+			if (rows == 0 || cols == 0) {
+				throw new IllegalMatrixDimensionException("The number of rows and columns must be greater than 0");
+			}
+			
+			data = new int[rows][cols];
+			
+			for (int i = 0; i < rows; i++) {
+				line = null;
+						
+				if ((line = buffer.readLine()) != null) {				
+					try (Scanner scanner = new Scanner(line)) {
+						for (int j = 0; j < cols; j++) {
+							data[i][j] = scanner.nextInt();
+						}						
+					}
+				}						
+			}				
+			
+		} catch (IOException e) {
+			System.out.println("Matrix cannot be created: Cannot read file: " + 
+					e.getLocalizedMessage());		
+		}
+		
+		return data; 
 	}
 
 
 	public Matrix add(Matrix other) throws IllegalMatrixDimensionException {
 		
-		if (this.rows != other.rows || this.cols != other.cols) {
+		if (this.getRowsCount() != other.getRowsCount() || 
+				this.getColsCount() != other.getColsCount()) 
+		{
 			throw new IllegalMatrixDimensionException();
 		}
 		
-		int[][] result = new int[this.rows][this.cols];
+		int[][] result = new int[this.getRowsCount()][this.getColsCount()];
 		
-		for (int i = 0; i < this.rows; i++) {
-			for (int j = 0; j < this.cols; j++) {
+		for (int i = 0; i < this.getRowsCount(); i++) {
+			for (int j = 0; j < this.getColsCount(); j++) {
 				result[i][j] = this.data[i][j] + other.data[i][j];
 			}
 		}
@@ -108,15 +110,15 @@ public class Matrix {
 
 	public Matrix mult(Matrix other) throws IllegalMatrixDimensionException {
 		
-		if (this.cols != other.rows) {
+		if (this.getColsCount() != other.getRowsCount()) {
 			throw new IllegalMatrixDimensionException();
 		}
 		
-		int[][] result = new int[this.rows][other.cols];				
+		int[][] result = new int[this.getRowsCount()][other.getColsCount()];				
 		
-        for (int i = 0; i < this.rows; i++) { 
-            for (int j = 0; j < other.cols; j++) { 
-                for (int k = 0; k < this.cols; k++) { 
+        for (int i = 0; i < this.getRowsCount(); i++) { 
+            for (int j = 0; j < other.getColsCount(); j++) { 
+                for (int k = 0; k < this.getColsCount(); k++) { 
                     result[i][j] += this.data[i][k] * other.data[k][j];
                 }
             }            
@@ -131,10 +133,10 @@ public class Matrix {
 			throw new DivisionByZeroException();
 		}
 		
-		int[][] result = new int[this.rows][this.cols];
+		int[][] result = new int[this.getRowsCount()][this.getColsCount()];
 		
-		for (int i = 0; i < this.rows; i++) {
-			for (int j = 0; j < this.cols; j++) {
+		for (int i = 0; i < this.getRowsCount(); i++) {
+			for (int j = 0; j < this.getColsCount(); j++) {
 				result[i][j] = this.data[i][j] / divider;
 			}
 		}		
@@ -145,14 +147,22 @@ public class Matrix {
 	public String getName() {
 		return this.name;
 	}
+	
+	public int getRowsCount() {
+		return this.data.length;
+	}
+	
+	public int getColsCount() {
+		return this.data[0].length;
+	}
 
 	@Override
 	public String toString() {
 		
 		String result = "";
 		
-		for (int i = 0; i < this.rows; i++) {
-			for (int j = 0; j < this.cols; j++) {
+		for (int i = 0; i < this.getRowsCount(); i++) {
+			for (int j = 0; j < this.getColsCount(); j++) {
 				result += this.data[i][j] + " ";
 			}
 			result += "\n";
